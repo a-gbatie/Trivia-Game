@@ -20,7 +20,7 @@ export async function showMainMenu(gameState) {
       console.log(chalk.blue("Thanks for playing!"));
       process.exit(0);
   }
-}
+};
 
 export async function selectTopic(gameState) {
   const topic = await select({
@@ -40,8 +40,8 @@ export async function selectTopic(gameState) {
   const topicQuestions = getQuestionsByTopic(gameState.selectedTopic);
   const shuffledQuestions = shuffleQuestions(topicQuestions);
 
-  console.log(shuffledQuestions);
-}
+  await askQuestion(shuffledQuestions[0], gameState);
+};
 
 export function getQuestionsByTopic(selectedTopic) {
   if (selectedTopic === "All") {
@@ -51,8 +51,25 @@ export function getQuestionsByTopic(selectedTopic) {
   return questions.filter((question) => {
     return question.topic === selectedTopic;
   });
-}
+};
 
 export function shuffleQuestions(questions) {
   return [...questions].sort(() => Math.random() - 0.5);
-}
+};
+
+export async function askQuestion(question, gameState) {
+  const playerAnswer = await select({
+    message: question.question,
+    choices: question.choices.map((choice) => ({
+      name: choice,
+      value: choice,
+    })),
+  });
+
+  if (playerAnswer === question.answer) {
+    console.log(chalk.green("Correct!"));
+    gameState.score += 1;
+  } else {
+    console.log(chalk.red(`Incorrect! The correct answer was: ${question.answer}`));
+  }
+};
