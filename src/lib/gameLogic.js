@@ -63,7 +63,7 @@ export function getGameQuestions(questions, amount = 5) {
 };
 
 export async function askQuestion(question, gameState) {
-  const playerAnswer = await select({
+  const answerPromise = select({
     message: question.question,
     choices: question.choices.map((choice) => ({
       name: choice,
@@ -71,12 +71,28 @@ export async function askQuestion(question, gameState) {
     })),
   });
 
+  const timerPromise = new Promise((resolve) => {
+    setTimeout(() => {
+      resolve("TIME_UP");
+    }, 5000);
+  });
+
+  const playerAnswer = await Promise.race([
+    answerPromise,
+    timerPromise,
+  ]);
+
+  if (playerAnswer === "TIME_UP") {
+    console.log(chalk.yellow("\nTime's up!"));
+    return;
+  }
+
   if (playerAnswer === question.answer) {
     console.log(chalk.green("Correct!"));
     gameState.score += 1;
   } else {
     console.log(
-      chalk.red(`Incorrect! The correct answer was: ${question.answer}`),
+      chalk.red(`Incorrect! The correct answer was: ${question.answer}`)
     );
   }
 };
