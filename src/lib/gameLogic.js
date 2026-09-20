@@ -20,7 +20,7 @@ export async function showMainMenu(gameState) {
       console.log(chalk.blue("Thanks for playing!"));
       process.exit(0);
   }
-};
+}
 
 export async function selectTopic(gameState) {
   const topic = await select({
@@ -42,7 +42,7 @@ export async function selectTopic(gameState) {
   const gameQuestions = getGameQuestions(shuffledQuestions);
 
   await playGame(gameQuestions, gameState);
-};
+}
 
 export function getQuestionsByTopic(selectedTopic) {
   if (selectedTopic === "All") {
@@ -52,52 +52,61 @@ export function getQuestionsByTopic(selectedTopic) {
   return questions.filter((question) => {
     return question.topic === selectedTopic;
   });
-};
+}
 
 export function shuffleQuestions(questions) {
   return [...questions].sort(() => Math.random() - 0.5);
-};
+}
 
 export function getGameQuestions(questions, amount = 5) {
   return questions.slice(0, amount);
-};
+}
 
 export async function askQuestion(question, gameState) {
-  const answerPromise = select({
-    message: question.question,
-    choices: question.choices.map((choice) => ({
-      name: choice,
-      value: choice,
-    })),
-  });
+  const controller = new AbortController();
 
-  const timerPromise = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve("TIME_UP");
-    }, 5000);
-  });
+  const timer = setTimeout(() => {
+    controller.abort();
+  }, 5000);
 
-  const playerAnswer = await Promise.race([
-    answerPromise,
-    timerPromise,
-  ]);
-
-  if (playerAnswer === "TIME_UP") {
-    console.log(chalk.yellow("\nTime's up!"));
-    return;
-  }
-
-  if (playerAnswer === question.answer) {
-    console.log(chalk.green("Correct!"));
-    gameState.score += 1;
-  } else {
-    console.log(
-      chalk.red(`Incorrect! The correct answer was: ${question.answer}`)
+  try {
+    const playerAnswer = await select(
+      {
+        message: question.question,
+        choices: question.choices.map((choice) => ({
+          name: choice,
+          value: choice,
+        })),
+      },
+      {
+        signal: controller.signal,
+      }
     );
+
+    clearTimeout(timer);
+
+    if (playerAnswer === question.answer) {
+      console.log(chalk.green("Correct!"));
+      gameState.score += 1;
+    } else {
+      console.log(
+        chalk.red(
+          `Incorrect! The correct answer was: ${question.answer}`
+        )
+      );
+    }
+  } catch (error) {
+    if (controller.signal.aborted) {
+      console.log(chalk.yellow(`\nTime's up! \nThe correct answer was ${question.answer}.`));
+    } else {
+      throw error;
+    }
   }
-};
+}
 
 export async function playGame(questions, gameState) {
+  gameState.score = 0;
+
   for (
     gameState.currentQuestion = 0;
     gameState.currentQuestion < questions.length;
@@ -113,4 +122,33 @@ export async function playGame(questions, gameState) {
       `Game over! Your score is ${gameState.score}/${questions.length}`,
     ),
   );
-};
+
+  gameState.gameOver = true;
+
+  await showEndMenu(gameState);
+}
+
+export async function showEndMenu(gameState) {
+  const action = await select({
+    message: "What would you like to do?",
+    choices: [
+      { name: "Play Again", value: "playAgain" },
+      { name: "Main Menu", value: "mainMenu" },
+      { name: "Quit", value: "quit" },
+    ],
+  });
+
+  switch (action) {
+    case "playAgain":
+      await selectTopic(gameState);
+      break;
+
+    case "mainMenu":
+      await showMainMenu(gameState);
+      break;
+
+    case "quit":
+      console.log(chalk.blue("Thanks for playing!"));
+      process.exit(0);
+  }
+}
