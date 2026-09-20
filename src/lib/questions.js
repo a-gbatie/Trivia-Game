@@ -35,7 +35,7 @@ const questions = [
 
   {
     topic: "Capitals",
-    question: "Which state capital is Santa Fe?",
+    question: "Santa Fe is the capital of which state?",
     choices: ["New Mexico", "Texas", "Nevada", "California"],
     answer: "New Mexico"
   },
@@ -66,7 +66,49 @@ const questions = [
     question: "Earth is the ___ planet from the sun?",
     choices: ["second", "third", "sixth", "fourth"],
     answer: "third"
-  }
+  },
+
+  {
+    topic: "Geography",
+    question: "What is the smallest country in the world?",
+    choices: ["Vatican City", "Puerto Rico", "Thailand", "Egypt"],
+    answer: "Vatican City"
+  },
+
+  {
+    topic: "Geography",
+    question: "What is the longest river in the world?",
+    choices: ["The Amazon", "The Mississippi", "The Nile", "The Thames"],
+    answer: "The Nile"
+  },
+
+  {
+    topic: "Geography",
+    question: "What is the only country that is also a continent?",
+    choices: ["Africa", "Australia", "Antarctica", "Asia"],
+    answer: "Australia"
+  },
+
+  {
+    topic: "Entertainment",
+    question: "Who was the first Disney princess?",
+    choices: ["Snow White", "Aurora", "Pocahontas", "Ariel"],
+    answer: "Snow White"
+  },
+
+  {
+    topic: "Entertainment",
+    question: "Who played Jack in Titanic?",
+    choices: ["Brad Pitt", "Matt Damon", "Ben Affleck", "Leonardo DiCaprio"],
+    answer: "Leonardo DiCaprio"
+  },
+
+  {
+    topic: "Entertainment",
+    question: "What board game involves buying and trading properties?",
+    choices: ["Life", "Monopoly", "Chutes & Ladders", "Sorry"],
+    answer: "Monopoly"
+  },
 ];
 
 export default questions;

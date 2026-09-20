@@ -19,8 +19,8 @@ export async function showMainMenu(gameState) {
     case "quit":
       console.log(chalk.blue("Thanks for playing!"));
       process.exit(0);
-  }
-}
+  };
+};
 
 export async function selectTopic(gameState) {
   const topic = await select({
@@ -29,6 +29,8 @@ export async function selectTopic(gameState) {
       { name: "Coding", value: "Coding" },
       { name: "Capitals", value: "Capitals" },
       { name: "Space", value: "Space" },
+      { name: "Geography", value: "Geography" },
+      { name: "Entertainment", value: "Entertainment" },
       { name: "All Topics", value: "All" },
     ],
   });
@@ -42,7 +44,7 @@ export async function selectTopic(gameState) {
   const gameQuestions = getGameQuestions(shuffledQuestions);
 
   await playGame(gameQuestions, gameState);
-}
+};
 
 export function getQuestionsByTopic(selectedTopic) {
   if (selectedTopic === "All") {
@@ -52,15 +54,15 @@ export function getQuestionsByTopic(selectedTopic) {
   return questions.filter((question) => {
     return question.topic === selectedTopic;
   });
-}
+};
 
 export function shuffleQuestions(questions) {
   return [...questions].sort(() => Math.random() - 0.5);
-}
+};
 
 export function getGameQuestions(questions, amount = 5) {
   return questions.slice(0, amount);
-}
+};
 
 export async function askQuestion(question, gameState) {
   const controller = new AbortController();
@@ -80,7 +82,7 @@ export async function askQuestion(question, gameState) {
       },
       {
         signal: controller.signal,
-      }
+      },
     );
 
     clearTimeout(timer);
@@ -90,19 +92,21 @@ export async function askQuestion(question, gameState) {
       gameState.score += 1;
     } else {
       console.log(
-        chalk.red(
-          `Incorrect! The correct answer was: ${question.answer}`
-        )
+        chalk.red(`Incorrect! The correct answer was: ${question.answer}`),
       );
     }
   } catch (error) {
     if (controller.signal.aborted) {
-      console.log(chalk.yellow(`\nTime's up! \nThe correct answer was ${question.answer}.`));
+      console.log(
+        chalk.yellow(
+          `\nTime's up! \nThe correct answer was ${question.answer}.`,
+        ),
+      );
     } else {
       throw error;
     }
-  }
-}
+  };
+};
 
 export async function playGame(questions, gameState) {
   gameState.score = 0;
@@ -115,7 +119,7 @@ export async function playGame(questions, gameState) {
     const question = questions[gameState.currentQuestion];
 
     await askQuestion(question, gameState);
-  }
+  };
 
   console.log(
     chalk.blue(
@@ -126,7 +130,7 @@ export async function playGame(questions, gameState) {
   gameState.gameOver = true;
 
   await showEndMenu(gameState);
-}
+};
 
 export async function showEndMenu(gameState) {
   const action = await select({
@@ -150,5 +154,5 @@ export async function showEndMenu(gameState) {
     case "quit":
       console.log(chalk.blue("Thanks for playing!"));
       process.exit(0);
-  }
-}
+  };
+};
