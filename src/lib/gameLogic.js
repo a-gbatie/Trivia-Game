@@ -40,7 +40,7 @@ export async function selectTopic(gameState) {
   const topicQuestions = getQuestionsByTopic(gameState.selectedTopic);
   const shuffledQuestions = shuffleQuestions(topicQuestions);
 
-  await askQuestion(shuffledQuestions[0], gameState);
+  await playGame(shuffledQuestions, gameState);
 };
 
 export function getQuestionsByTopic(selectedTopic) {
@@ -72,4 +72,20 @@ export async function askQuestion(question, gameState) {
   } else {
     console.log(chalk.red(`Incorrect! The correct answer was: ${question.answer}`));
   }
+};
+
+export async function playGame(questions, gameState) {
+  for (
+    gameState.currentQuestion = 0;
+    gameState.currentQuestion < questions.length;
+    gameState.currentQuestion++
+  ) {
+    const question = questions[gameState.currentQuestion];
+
+    await askQuestion(question, gameState);
+  }
+
+  console.log(
+    chalk.blue(`Game over! Your score is ${gameState.score}/${questions.length}`)
+  );
 };
