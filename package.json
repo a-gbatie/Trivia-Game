@@ -1,0 +1,29 @@
+{
+  "name": "3-trivia-game",
+  "version": "1.0.0",
+  "description": "You are developing a trivia game for an online quiz application. The trivia game should provide an engaging user experience by allowing players to answer questions, receive feedback on their performance, and manage their time effectively.",
+  "main": "index.js",
+  "bin": {
+    "3-trivia-game": "bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a-gbatie/Trivia-Game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/a-gbatie/Trivia-Game/issues"
+  },
+  "homepage": "https://github.com/a-gbatie/Trivia-Game#readme",
+  "dependencies": {
+    "@inquirer/prompts": "^7.5.1",
+    "chalk": "^4.1.2",
+    "commander": "^13.1.0"
+  }
+}
