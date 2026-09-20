@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "You are developing a trivia game for an online quiz application. The trivia game should provide an engaging user experience by allowing players to answer questions, receive feedback on their performance, and manage their time effectively.",
   "main": "index.js",
+  "type": "module",
   "bin": {
     "3-trivia-game": "bin/index.js"
   },
@@ -16,7 +17,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/a-gbatie/Trivia-Game/issues"
   },
